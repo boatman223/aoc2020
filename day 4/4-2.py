@@ -1,17 +1,14 @@
 def build_passports(data):
     passports = []
     for passport in data:
-        passdict = {}
         passport = passport.replace('\n', ' ').split(' ')
-        for field in passport:
-            k, v = field.split(':')
-            passdict[k] = v
+        passdict = dict(field.split(':') for field in passport)
         passports.append(passdict)
     return passports
 
 def is_valid(passport, req_fields):
     fields = set(list(passport))
-    if not fields.issuperset(req_fields):
+    if not fields >= req_fields:
         return False
 
     if int(passport['byr']) < 1920 or int(passport['byr']) > 2002:
