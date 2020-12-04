@@ -60,4 +60,5 @@ valid_passports = 0
 for passport in passports:
     if is_valid(passport, req_fields):
         valid_passports += 1
+
 print(valid_passports)
