@@ -4,6 +4,7 @@ def build_passports(data):
         passport = passport.replace('\n', ' ').split(' ')
         passdict = dict(field.split(':') for field in passport)
         passports.append(passdict)
+
     return passports
 
 def is_valid(passport, req_fields):
