@@ -8,7 +8,7 @@ def build_passports(data):
     return passports
 
 def is_valid(passport, req_fields):
-    fields = set(list(passport))
+    fields = set(passport)
     if not fields >= req_fields:
         return False
 
