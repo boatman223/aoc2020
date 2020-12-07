@@ -24,11 +24,11 @@ def is_valid(passport, req_fields):
         return False
 
     if hgt := re.search('(\d+)(cm|in)', passport['hgt']):
-        if hgt.group(2) == 'cm':
-            if not 150 <= int(hgt.group(1)) <= 193:
+        if hgt[2] == 'cm':
+            if not 150 <= int(hgt[1]) <= 193:
                 return False
-        elif hgt.group(2) == 'in':
-            if not 59 <= int(hgt.group(1)) <= 76:
+        elif hgt[2] == 'in':
+            if not 59 <= int(hgt[1]) <= 76:
                 return False
     else:
         return False
