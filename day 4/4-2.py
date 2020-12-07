@@ -1,3 +1,5 @@
+import re
+
 def build_passports(data):
     passports = []
     for passport in data:
@@ -12,38 +14,32 @@ def is_valid(passport, req_fields):
     if not fields >= req_fields:
         return False
 
-    if int(passport['byr']) < 1920 or int(passport['byr']) > 2002:
+    if not 1920 <= int(passport['byr']) <= 2002:
         return False
 
-    if int(passport['iyr']) < 2010 or int(passport['iyr']) > 2020:
+    if not 2010 <= int(passport['iyr']) <= 2020:
         return False
 
-    if int(passport['eyr']) < 2020 or int(passport['eyr']) > 2030:
+    if not 2020 <= int(passport['eyr']) <= 2030:
         return False
 
-    if passport['hgt'][-2:] == 'cm':
-        if int(passport['hgt'][:-2]) < 150 or int(passport['hgt'][:-2]) > 193:
-            return False
-    elif passport['hgt'][-2:] == 'in':
-        if int(passport['hgt'][:-2]) < 59 or int(passport['hgt'][:-2]) > 76:
-            return False
+    if hgt := re.search('(\d+)(cm|in)', passport['hgt']):
+        if hgt.group(2) == 'cm':
+            if not 150 <= int(hgt.group(1)) <= 193:
+                return False
+        elif hgt.group(2) == 'in':
+            if not 59 <= int(hgt.group(1)) <= 76:
+                return False
     else:
         return False
 
-    if passport['hcl'][0] != '#':
+    if not re.match('^#[0-9a-f]{6}$', passport['hcl']):
         return False
-    if len(passport['hcl']) != 7:
-        return False
-    for char in passport['hcl'][1:]:
-        if char.lower() not in '0123456789abcdef':
-            return False
 
     if passport['ecl'] not in ('amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'):
         return False
 
-    if not passport['pid'].isnumeric():
-        return False
-    if len(passport['pid']) != 9:
+    if not re.match('^\d{9}$', passport['pid']):
         return False
 
     return True
