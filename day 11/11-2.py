@@ -16,90 +16,30 @@ def parse_grid(grid):
 
 def num_visible(seat, empty, occupied, constraints):
     total = 0
+    directions = (
+        (1, 0),
+        (0, 1),
+        (-1, 0),
+        (0, -1),
+        (1, 1),
+        (1, -1),
+        (-1, 1),
+        (-1, -1),
+    )
 
-    #right
-    x, y = seat[0], seat[1]
-    while x <= constraints['max_x']:
-        x += 1
-        if (x, y) in occupied:
-            total += 1
-            break
-        elif (x, y) in empty:
-            break
-
-    #left
-    x, y = seat[0], seat[1]
-    while x >= constraints['min_x']:
-        x -= 1
-        if (x, y) in occupied:
-            total += 1
-            break
-        elif (x, y) in empty:
-            break
-
-    #up
-    x, y = seat[0], seat[1]
-    while y >= constraints['min_y']:
-        y -= 1
-        if (x, y) in occupied:
-            total += 1
-            break
-        elif (x, y) in empty:
-            break
-
-    #down
-    x, y = seat[0], seat[1]
-    while y <= constraints['max_y']:
-        y += 1
-        if (x, y) in occupied:
-            total += 1
-            break
-        elif (x, y) in empty:
-            break
-
-    #up-right
-    x, y = seat[0], seat[1]
-    while x <= constraints['max_x'] and y >= constraints['min_y']:
-        x += 1
-        y -= 1
-        if (x, y) in occupied:
-            total += 1
-            break
-        elif (x, y) in empty:
-            break
-
-    #down-right
-    x, y = seat[0], seat[1]
-    while x <= constraints['max_x'] and y <= constraints['max_y']:
-        x += 1
-        y += 1
-        if (x, y) in occupied:
-            total += 1
-            break
-        elif (x, y) in empty:
-            break
-
-    #up-left
-    x, y = seat[0], seat[1]
-    while x >= constraints['min_x'] and y >= constraints['min_y']:
-        x -= 1
-        y -= 1
-        if (x, y) in occupied:
-            total += 1
-            break
-        elif (x, y) in empty:
-            break
-
-    #down-left
-    x, y = seat[0], seat[1]
-    while x >= constraints['min_x'] and y <= constraints['max_y']:
-        x -= 1
-        y += 1
-        if (x, y) in occupied:
-            total += 1
-            break
-        elif (x, y) in empty:
-            break
+    for direction in directions:
+        x, y = seat[0], seat[1]
+        while (
+            x in range(constraints['min_x'], constraints['max_x']+1) and
+            y in range(constraints['min_y'], constraints['max_y']+1)
+        ):
+            x += direction[0]
+            y += direction[1]
+            if (x, y) in occupied:
+                total += 1
+                break
+            elif (x, y) in empty:
+                break
 
     return total
 
@@ -127,7 +67,7 @@ def timestep(empty, occupied):
 empty, occupied = parse_grid(grid)
 
 while True:
-    print(len(occupied), len(empty))
+    print(f'occupied: {len(occupied)} | empty: {len(empty)}')
     new_empty, new_occupied = timestep(empty, occupied)
     if new_empty == empty:
         break
