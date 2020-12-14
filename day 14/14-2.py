@@ -12,16 +12,15 @@ def unset_bit(value, index):
     return value
 
 def apply_mask(mask, address, index):
-    addresses = []
     for i in range(index, len(mask)):
         if mask[i] == '1':
             address = set_bit(address, i)
         elif mask[i] == 'X':
-            addresses.extend(apply_mask(mask, set_bit(address, i), i+1))
-            addresses.extend(apply_mask(mask, unset_bit(address, i), i+1))
-            return addresses
-    addresses.append(address)
-    return addresses
+            yield from apply_mask(mask, set_bit(address, i), i+1)
+            yield from apply_mask(mask, unset_bit(address, i), i+1)
+            break
+    else:
+        yield address
 
 memory = {}
 mask = ''
@@ -34,8 +33,7 @@ for line in data:
     elif instruction == 'mem':
         address = int(match[3])
         value = int(match[4])
-        addresses = apply_mask(mask, address, 0)
-        for address in addresses:
+        for address in apply_mask(mask, address, 0):
             memory[address] = value
 
 print(sum(memory.values()))
