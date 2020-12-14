@@ -1,15 +1,10 @@
 import re
 
-with open('input') as f:
-    data = f.read().splitlines()
-
 def set_bit(value, index):
-    value = value | (1 << index)
-    return value
+    return value | (1 << index)
 
 def unset_bit(value, index):
-    value = value & ~(1 << index)
-    return value
+    return value & ~(1 << index)
 
 def apply_mask(mask, address, index):
     for i in range(index, len(mask)):
@@ -21,6 +16,10 @@ def apply_mask(mask, address, index):
             break
     else:
         yield address
+
+
+with open('input') as f:
+    data = f.read().splitlines()
 
 memory = {}
 mask = ''
