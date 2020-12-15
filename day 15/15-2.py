@@ -1,14 +1,15 @@
 import collections
 
 with open('input') as f:
-    numbers = [int(x) for x in f.read().split(',')[:-1]]
+    data = [int(x) for x in f.read().split(',')]
 
-numberdict = collections.defaultdict(int, {v:k+1 for k,v in enumerate(numbers)})
-timestep = 6
-current = 0
+timestep = len(data)
+current = data[-1]
+numbers = collections.defaultdict(int, {v:k+1 for k,v in enumerate(data[:-1])})
+
 while timestep < 30000000:
-    lasttime = numberdict[current]
-    numberdict[current] = timestep
+    lasttime = numbers[current]
+    numbers[current] = timestep
     current = (timestep - lasttime) % timestep
     timestep += 1
 
