@@ -9,10 +9,7 @@ current = 0
 while timestep < 30000000:
     lasttime = numberdict[current]
     numberdict[current] = timestep
-    if lasttime:
-        current = timestep - lasttime
-    else:
-        current = 0
+    current = (timestep - lasttime) % timestep
     timestep += 1
 
 print(current)
