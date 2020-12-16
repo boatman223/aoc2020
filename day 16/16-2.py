@@ -29,7 +29,6 @@ def parse_data(data):
     tickets = []
     for line in data[2].splitlines()[1:]:
         tickets.append([int(x) for x in line.split(',')])
-
     tickets = remove_invalid_tickets(tickets, rules)
 
     my_ticket = [int(x) for x in data[1].splitlines()[1].split(',')]
@@ -41,7 +40,7 @@ def parse_data(data):
 
     valid_fields = [list(rules.keys()) for _ in range(len(fields))]
 
-    return rules, tickets, my_ticket, fields, valid_fields
+    return rules, my_ticket, fields, valid_fields
 
 def check_field_validity(fields, rules, valid_fields):
     for i, field in enumerate(fields):
@@ -76,7 +75,7 @@ def compute_solution(valid_fields, my_ticket):
 
     return total
 
-rules, tickets, my_ticket, fields, valid_fields = parse_data(data)
+rules, my_ticket, fields, valid_fields = parse_data(data)
 valid_fields = check_field_validity(fields, rules, valid_fields)
 valid_fields = pare_valid_fields(valid_fields)
 solution = compute_solution(valid_fields, my_ticket)
