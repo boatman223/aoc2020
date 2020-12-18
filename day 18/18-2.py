@@ -4,7 +4,6 @@ with open('input') as f:
     equations = [x.replace('(', '( ').replace(')', ' )').split(' ') for x in f.read().splitlines()]
 
 def fix_equation(equation):
-
     current = 0
     left_queue = []
     matching_left = 0
