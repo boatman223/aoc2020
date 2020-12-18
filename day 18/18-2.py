@@ -5,18 +5,20 @@ with open('input') as f:
 
 def fix_equation(equation):
     current = 0
-    left_queue = []
     matching_left = 0
+    left_queue = []
     add_right = collections.defaultdict(lambda: False)
     while current < len(equation):
         if equation[current] == '(':
             left_queue.append(current)
+
         elif equation[current] == ')':
             matching_left = left_queue.pop()
             if add_right[len(left_queue)]:
                 equation.insert(current, ')')
-                current += 1
                 add_right[len(left_queue)] = False
+                current += 1
+
         elif equation[current] == '+':
             if equation[current-1] in '0123456789':
                 equation.insert(current-1, '(')
@@ -25,11 +27,13 @@ def fix_equation(equation):
             elif equation[current-1] == ')':
                 equation.insert(matching_left, '(')
                 current += 1
+
             if equation[current+1] in '0123456789':
                 equation.insert(current+2, ')')
                 current += 2
             elif equation[current+1] == '(':
                 add_right[len(left_queue)] = True
+
         current += 1
 
     return equation
