@@ -1,5 +1,6 @@
 import regex
 import random
+import time
 
 class Tile:
 
@@ -15,12 +16,6 @@ class Tile:
         self.id = int(tile[1][:-1])
         self.tile = tile[2:]
         self.coordinates = []
-        self.edges = {
-            0:   self.tile[0],
-            90:  ''.join([x[-1] for x in self.tile]),
-            180: tile[-1],
-            270: ''.join([x[0] for x in self.tile])
-        }
 
     def row(self, num):
         return self.tile[num]
@@ -28,35 +23,27 @@ class Tile:
     def col(self, num):
         return ''.join([x[num] for x in self.tile])
 
+    def edges(self):
+        edges = {
+            0:   self.tile[0],
+            90:  ''.join([x[-1] for x in self.tile]),
+            180: self.tile[-1],
+            270: ''.join([x[0] for x in self.tile])
+        }
+        for angle, edge in edges.items():
+            yield angle, edge
+
     def rotate90(self):
         new_tile = [self.col(i)[::-1] for i in range(10)]
-        new_edges = {
-            0:   self.edges[270][::-1],
-            90:  self.edges[0],
-            180: self.edges[90][::-1],
-            270: self.edges[180]
-        }
-        return new_tile, new_edges
+        return new_tile
 
     def flip_h(self):
         new_tile = [self.row(i)[::-1] for i in range(10)]
-        new_edges = {
-            0:   self.edges[0][::-1],
-            90:  self.edges[270],
-            180: self.edges[180][::-1],
-            270: self.edges[90]
-        }
-        return new_tile, new_edges
+        return new_tile
 
     def flip_v(self):
         new_tile = [self.row(i) for i in reversed(range(10))]
-        new_edges = {
-            0:   self.edges[180],
-            90:  self.edges[90][::-1],
-            180: self.edges[0],
-            270: self.edges[270][::-1]
-        }
-        return new_tile, new_edges
+        return new_tile
 
     def strip_borders(self):
         new_tile = [row[1:-1] for row in self.tile[1:-1]]
@@ -101,15 +88,15 @@ def orient_tiles(tiles, starting_tile):
     queue = [starting_tile]
     while queue:
         center = queue.pop()
-        for angle, edge in center.edges.items():
+        for angle, edge in center.edges():
             for tile in tiles:
-                for angle2, edge2 in tile.edges.items():
+                for angle2, edge2 in tile.edges():
                     if center != tile and edge in (edge2, edge2[::-1]):
                         a1 = angle if angle in (0, 90) else ((angle - 180) % 360)
                         a2 = angle2 if angle in (0, 90) else ((angle2 - 180) % 360)
                         match = normal_match if edge == edge2 else flipped_match
                         for op in match[a1][a2]:
-                            tile.tile, tile.edges = getattr(tile, op)()
+                            tile.tile = getattr(tile, op)()
                         tile.coordinates = [coords[angle][0]+center.coordinates[0], coords[angle][1]+center.coordinates[1]]
                         tiles.remove(tile)
                         queue.append(tile)
@@ -136,11 +123,11 @@ def build_image(tiles):
 
 def find_monsters(image):
 
-    def flip_image(image):
+    def _flip_image(image):
         new_image = [line[::-1] for line in image]
         return new_image
 
-    def rotate_image(image):
+    def _rotate_image(image):
         new_image = []
         for i in range(len(image[0])):
             new_image.append(''.join([x[i] for x in image])[::-1])
@@ -158,9 +145,9 @@ def find_monsters(image):
                     if regex.match(MONSTER2, image[row-1][match.start():match.end()]):
                         if regex.match(MONSTER1, image[row-2][match.start():match.end()]):
                             monsters += 1
-        image = rotate_image(image)
+        image = _rotate_image(image)
         rotates += 1
-        if rotates == 4: image = flip_image(image)
+        if rotates == 4: image = _flip_image(image)
         if rotates == 8: break
     return image, monsters
 
@@ -171,6 +158,7 @@ def get_solution(image, monsters):
     total -= monsters*15
     return total
 
+t = time.perf_counter()
 with open('input') as f:
     tiles = [x.split() for x in f.read().split('\n\n')]
 
@@ -185,3 +173,4 @@ image, monsters = find_monsters(image)
 solution = get_solution(image, monsters)
 
 print(solution)
+print(time.perf_counter()-t)
