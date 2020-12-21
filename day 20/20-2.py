@@ -1,4 +1,5 @@
 import regex
+import random
 
 class Tile:
 
@@ -61,7 +62,7 @@ class Tile:
         new_tile = [row[1:-1] for row in self.tile[1:-1]]
         return new_tile
 
-def orient_tiles(tiles):
+def orient_tiles(tiles, starting_tile):
     normal_match = {
         0:  {
             0:   ('flip_v',),
@@ -97,7 +98,7 @@ def orient_tiles(tiles):
         270: [-1, 0],
     }
 
-    queue = [tiles[0]]
+    queue = [starting_tile]
     while queue:
         center = queue.pop()
         for angle, edge in center.edges.items():
@@ -173,8 +174,10 @@ with open('input') as f:
     tiles = [x.split() for x in f.read().split('\n\n')]
 
 Tile.tiles = [Tile(tile) for tile in tiles]
-Tile.tiles[0].coordinates = [0, 0]
-orient_tiles(Tile.tiles[:])
+starting_tile = Tile.tiles[random.randint(0, len(Tile.tiles))]
+starting_tile.coordinates = [0, 0]
+
+orient_tiles(Tile.tiles[:], starting_tile)
 adjust_origin(Tile.tiles)
 image = build_image(Tile.tiles)
 image, monsters = find_monsters(image)
