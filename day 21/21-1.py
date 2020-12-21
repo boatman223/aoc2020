@@ -17,6 +17,7 @@ while identified:
         for ingredients, allergens in recipes:
             ingredients.discard(ingredient)
             allergens.discard(allergen)
+            all_allergens.discard(allergen)
         del identified[allergen]
 
     for allergen in all_allergens:
@@ -25,8 +26,7 @@ while identified:
             if allergen in allergens:
                 poss.append(ingredients)
 
-        try: poss = set.intersection(*poss)
-        except TypeError: pass
+        poss = set.intersection(*poss)
         if len(poss) == 1:
             identified[allergen] = ''.join(poss)
 
