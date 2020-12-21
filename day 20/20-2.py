@@ -9,8 +9,8 @@ class Tile:
         self.tile = tile[2:]
         self.coordinates = []
         self.edges = {
-            0: self.tile[0],
-            90: ''.join([x[-1] for x in self.tile]),
+            0:   self.tile[0],
+            90:  ''.join([x[-1] for x in self.tile]),
             180: tile[-1],
             270: ''.join([x[0] for x in self.tile])
         }
@@ -24,8 +24,8 @@ class Tile:
     def rotate90(self):
         new_tile = [self.col(i)[::-1] for i in range(10)]
         new_edges = {
-            0: self.edges[270][::-1],
-            90: self.edges[0],
+            0:   self.edges[270][::-1],
+            90:  self.edges[0],
             180: self.edges[90][::-1],
             270: self.edges[180]
         }
@@ -34,8 +34,8 @@ class Tile:
     def flip_h(self):
         new_tile = [self.row(i)[::-1] for i in range(10)]
         new_edges = {
-            0: self.edges[0][::-1],
-            90: self.edges[270],
+            0:   self.edges[0][::-1],
+            90:  self.edges[270],
             180: self.edges[180][::-1],
             270: self.edges[90]
         }
@@ -44,8 +44,8 @@ class Tile:
     def flip_v(self):
         new_tile = [self.row(i) for i in reversed(range(10))]
         new_edges = {
-            0: self.edges[180],
-            90: self.edges[90][::-1],
+            0:   self.edges[180],
+            90:  self.edges[90][::-1],
             180: self.edges[0],
             270: self.edges[270][::-1]
         }
@@ -63,36 +63,36 @@ class Tile:
 
 def orient_tiles(tiles):
     normal_match = {
-        0: {
-            0: ('flip_v',),
-            90: ('rotate90', 'flip_h'),
+        0:  {
+            0:   ('flip_v',),
+            90:  ('rotate90', 'flip_h'),
             180: (),
             270: ('rotate90', 'rotate90', 'rotate90'),
         },
         90: {
-            0: ('rotate90', 'flip_h'),
-            90: ('flip_h',),
+            0:   ('rotate90', 'flip_h'),
+            90:  ('flip_h',),
             180: ('rotate90',),
             270: (),
         },
     }
     flipped_match = {
-        0: {
-            0: ('rotate90', 'rotate90'),
-            90: ('rotate90',),
+        0:  {
+            0:   ('rotate90', 'rotate90'),
+            90:  ('rotate90',),
             180: ('flip_h',),
             270: ('rotate90', 'flip_v'),
         },
         90: {
-            0: ('rotate90', 'rotate90', 'rotate90'),
-            90: ('rotate90', 'rotate90'),
+            0:   ('rotate90', 'rotate90', 'rotate90'),
+            90:  ('rotate90', 'rotate90'),
             180: ('rotate90', 'flip_v'),
             270: ('flip_v',),
         },
     }
     coords = {
-        0: [0, 1],
-        90: [1, 0],
+        0:   [0, 1],
+        90:  [1, 0],
         180: [0, -1],
         270: [-1, 0],
     }
