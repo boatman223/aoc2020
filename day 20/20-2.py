@@ -146,12 +146,12 @@ def find_monsters(image):
             new_image.append(''.join([x[i] for x in image])[::-1])
         return new_image
 
-    monsters = 0
     MONSTER1 = regex.compile('..................#.')
     MONSTER2 = regex.compile('#....##....##....###')
     MONSTER3 = regex.compile('.#..#..#..#..#..#...')
+    monsters = 0
+    rotates = 0
     while not monsters:
-        rotates = 0
         for row, line in enumerate(image):
             if matches := regex.finditer(MONSTER3, line, overlapped=True):
                 for match in matches:
@@ -161,6 +161,7 @@ def find_monsters(image):
         image = rotate_image(image)
         rotates += 1
         if rotates == 4: image = flip_image(image)
+        if rotates == 8: break
     return image, monsters
 
 def get_solution(image, monsters):
@@ -174,7 +175,7 @@ with open('input') as f:
     tiles = [x.split() for x in f.read().split('\n\n')]
 
 Tile.tiles = [Tile(tile) for tile in tiles]
-starting_tile = Tile.tiles[random.randint(0, len(Tile.tiles))]
+starting_tile = Tile.tiles[random.randint(0, len(Tile.tiles)-1)]
 starting_tile.coordinates = [0, 0]
 
 orient_tiles(Tile.tiles[:], starting_tile)
