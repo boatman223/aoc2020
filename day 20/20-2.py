@@ -146,13 +146,16 @@ def find_monsters(image):
         return new_image
 
     monsters = 0
+    MONSTER1 = regex.compile('..................#.')
+    MONSTER2 = regex.compile('#....##....##....###')
+    MONSTER3 = regex.compile('.#..#..#..#..#..#...')
     while not monsters:
         rotates = 0
         for row, line in enumerate(image):
-            if matches := regex.finditer('.#..#..#..#..#..#...', line, overlapped=True):
+            if matches := regex.finditer(MONSTER3, line, overlapped=True):
                 for match in matches:
-                    if regex.match('#....##....##....###', image[row-1][match.start():match.end()]):
-                        if regex.match('..................#.', image[row-2][match.start():match.end()]):
+                    if regex.match(MONSTER2, image[row-1][match.start():match.end()]):
+                        if regex.match(MONSTER1, image[row-2][match.start():match.end()]):
                             monsters += 1
         image = rotate_image(image)
         rotates += 1
