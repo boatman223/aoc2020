@@ -1,6 +1,5 @@
 import regex
 import random
-import time
 
 class Tile:
 
@@ -158,7 +157,6 @@ def get_solution(image, monsters):
     total -= monsters*15
     return total
 
-t = time.perf_counter()
 with open('input') as f:
     tiles = [x.split() for x in f.read().split('\n\n')]
 
@@ -173,4 +171,3 @@ image, monsters = find_monsters(image)
 solution = get_solution(image, monsters)
 
 print(solution)
-print(time.perf_counter()-t)
