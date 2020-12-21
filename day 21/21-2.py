@@ -33,5 +33,5 @@ while identified:
             identified[allergen] = ingredient
             solution.append((allergen, ingredient))
 
-solution = [x[1] for x in sorted(solution, key=lambda y: y[0])]
+solution = [x[1] for x in sorted(solution, key=lambda x: x[0])]
 print(','.join(solution))
