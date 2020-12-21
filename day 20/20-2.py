@@ -4,6 +4,12 @@ class Tile:
 
     tiles = []
 
+    def __str__(self):
+        out = f'Tile {self.id}\n'
+        for row in self.tile:
+            out += f'{row}\n'
+        return out
+
     def __init__(self, tile):
         self.id = int(tile[1][:-1])
         self.tile = tile[2:]
@@ -54,12 +60,6 @@ class Tile:
     def strip_borders(self):
         new_tile = [row[1:-1] for row in self.tile[1:-1]]
         return new_tile
-
-    def print_tile(self):
-        print(f'\nTile #{self.id}')
-        for row in self.tile:
-            print(row)
-        print('')
 
 def orient_tiles(tiles):
     normal_match = {
