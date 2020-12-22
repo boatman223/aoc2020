@@ -26,12 +26,9 @@ def play_game(decks: tuple[deque, deque]) -> int:
             winner = 1
         decks[0].extend([card1, card2]) if winner == 0 else decks[1].extend([card2, card1])
 
-    if decks[0]:
-        games[initial_position] = 0
-        return 0
-    else:
-        games[initial_position] = 1
-        return 1
+    winner = 0 if decks[0] else 1
+    games[initial_position] = winner
+    return winner
 
 with open('input') as f:
     decks = [x.split('\n')[1:] for x in f.read().split('\n\n')]
