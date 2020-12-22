@@ -3,12 +3,12 @@ from itertools import islice
 
 def play_game(decks: tuple[deque, deque]) -> int:
     positions = set()
-    initial_position = tuple((tuple(decks[0]), tuple(decks[1])))
+    initial_position = (tuple(decks[0]), tuple(decks[1]))
     if initial_position in games:
         return games[initial_position]
 
     while decks[0] and decks[1]:
-        position = tuple((tuple(decks[0]), tuple(decks[1])))
+        position = (tuple(decks[0]), tuple(decks[1]))
         if position in positions:
             games[initial_position] = 0
             return 0
