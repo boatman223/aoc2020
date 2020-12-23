@@ -1,6 +1,6 @@
 import regex
 import random
-from typing import Iterator
+from collections.abc import Iterator
 
 class Tile:
 
@@ -16,6 +16,7 @@ class Tile:
         self.id = int(tile[1][:-1])
         self.tile = tile[2:]
         self.coords = []
+        self._edges = {}
 
     def row(self, num: int) -> str:
         return self.tile[num]
@@ -23,15 +24,16 @@ class Tile:
     def col(self, num: int) -> str:
         return ''.join([x[num] for x in self.tile])
 
-    def edges(self) -> Iterator[tuple[int, str]]:
-        edges = {
-            0:   self.tile[0],
-            90:  ''.join([x[-1] for x in self.tile]),
-            180: self.tile[-1],
-            270: ''.join([x[0] for x in self.tile])
-        }
-        for angle, edge in edges.items():
-            yield angle, edge
+    @property
+    def edges(self) -> dict[int, str]:
+        if self._edges.get(0) != self.tile[0]:
+            self._edges = {
+                0:   self.tile[0],
+                90:  ''.join([x[-1] for x in self.tile]),
+                180: self.tile[-1],
+                270: ''.join([x[0] for x in self.tile])
+            }
+        return self._edges
 
     def rotate90(self) -> list[str]:
         new_tile = [self.col(i)[::-1] for i in range(10)]
@@ -88,9 +90,9 @@ def orient_tiles(tiles: list[Tile], starting_tile: Tile):
     queue = [starting_tile]
     while queue:
         center = queue.pop()
-        for angle, edge in center.edges():
+        for angle, edge in center.edges.items():
             for tile in tiles:
-                for angle2, edge2 in tile.edges():
+                for angle2, edge2 in tile.edges.items():
                     if center != tile and edge in (edge2, edge2[::-1]):
                         a1 = angle if angle in (0, 90) else ((angle - 180) % 360)
                         a2 = angle2 if angle in (0, 90) else ((angle2 - 180) % 360)
