@@ -18,7 +18,7 @@ even_lookup = {
     'se': [0, 1]
 }
 
-def set_initial_tiles(tiles):
+def set_initial_tiles(tiles: list[list[str]]) -> set:
     black_tiles = set()
     for tile in tiles:
         pos = [0, 0]
@@ -33,7 +33,7 @@ def set_initial_tiles(tiles):
             black_tiles.add(pos_t)
     return black_tiles
 
-def adj_tiles(tile, black_tiles):
+def adj_tiles(tile: tuple[int, int], black_tiles: set) -> tuple[set, set]:
     white_adj = set()
     black_adj = set()
     lookup = even_lookup if tile[1] % 2 == 0 else odd_lookup
@@ -45,7 +45,7 @@ def adj_tiles(tile, black_tiles):
             white_adj.add(adj)
     return black_adj, white_adj
 
-def timestep(black_tiles):
+def timestep(black_tiles: set) -> set:
     new_black_tiles = set()
     white_tiles = set()
     for tile in black_tiles:
