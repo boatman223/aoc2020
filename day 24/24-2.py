@@ -1,4 +1,5 @@
 import re
+from collections.abc import Iterator
 
 ODD_DIRS = {
     'e':  [1, 0],
@@ -18,7 +19,7 @@ EVEN_DIRS = {
     'se': [0, 1]
 }
 
-def set_initial_tiles(tiles: list[list[str]]) -> set:
+def set_initial_tiles(tiles: Iterator[list[str]]) -> set:
     black_tiles = set()
     for tile in tiles:
         pos = [0, 0]
@@ -63,7 +64,7 @@ with open('input') as f:
     tiles = f.read().splitlines()
 
 TILES_RE = re.compile('(e|se|sw|w|nw|ne)')
-tiles = [TILES_RE.findall(tile) for tile in tiles]
+tiles = (TILES_RE.findall(tile) for tile in tiles)
 
 black_tiles = set_initial_tiles(tiles)
 for _ in range(100):
