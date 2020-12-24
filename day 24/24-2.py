@@ -1,6 +1,6 @@
 import re
 
-odd_lookup = {
+ODD_DIRS = {
     'e':  [1, 0],
     'w':  [-1, 0],
     'nw': [0, -1],
@@ -9,7 +9,7 @@ odd_lookup = {
     'se': [1, 1]
 }
 
-even_lookup = {
+EVEN_DIRS = {
     'e':  [1, 0],
     'w':  [-1, 0],
     'nw': [-1, -1],
@@ -23,9 +23,9 @@ def set_initial_tiles(tiles: list[list[str]]) -> set:
     for tile in tiles:
         pos = [0, 0]
         for instruction in tile:
-            lookup = even_lookup if pos[1] % 2 == 0 else odd_lookup
-            pos[0] += lookup[instruction][0]
-            pos[1] += lookup[instruction][1]
+            dirs = EVEN_DIRS if pos[1] % 2 == 0 else ODD_DIRS
+            pos[0] += dirs[instruction][0]
+            pos[1] += dirs[instruction][1]
         pos_t = tuple(pos)
         if pos_t in black_tiles:
             black_tiles.remove(pos_t)
@@ -36,8 +36,8 @@ def set_initial_tiles(tiles: list[list[str]]) -> set:
 def adj_tiles(tile: tuple[int, int], black_tiles: set) -> tuple[set, set]:
     white_adj = set()
     black_adj = set()
-    lookup = even_lookup if tile[1] % 2 == 0 else odd_lookup
-    for direction in lookup.values():
+    dirs = EVEN_DIRS if tile[1] % 2 == 0 else ODD_DIRS
+    for direction in dirs.values():
         adj = (tile[0]+direction[0], tile[1]+direction[1])
         if adj in black_tiles:
             black_adj.add(adj)
