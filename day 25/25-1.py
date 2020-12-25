@@ -1,9 +1,9 @@
-def do_loop(subject_number, value):
+def do_loop(subject_number: int, value: int) -> int:
     value *= subject_number
     value = value % 20201227
     return value
 
-def get_encryption_key(loops, subject_number):
+def get_encryption_key(loops: int, subject_number: int) -> int:
     value = 1
     for _ in range(loops):
         value = do_loop(subject_number, value)
